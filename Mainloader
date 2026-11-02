@@ -1,1 +1,41 @@
 
+local GameScripts = {
+    [120219252362013] = "ThrowAFood.lua", 
+}
+
+local baseURL = "https://raw.githubusercontent.com/kuronamie-hub/NemoHub/main/"
+
+local currentID = game.PlaceId
+local scriptToLoad = GameScripts[currentID]
+
+if not scriptToLoad then
+    scriptToLoad = GameScripts[game.GameId]
+    if not scriptToLoad then
+        warn("[NemoHub] No script configured for this game (ID: " .. tostring(currentID) .. ")")
+        return
+    end
+end
+
+print("[NemoHub] Loading: " .. scriptToLoad)
+
+local success, err = pcall(function()
+    local finalURL = baseURL .. scriptToLoad .. "?t=" .. tostring(os.time())
+    local rawCode = game:HttpGet(finalURL)
+    
+    if not rawCode or rawCode == "" then
+        error("The file " .. scriptToLoad .. " is empty or missing on GitHub!")
+    end
+    
+    local mainScript = loadstring(rawCode)
+    
+    if mainScript then
+        mainScript()
+        print("[NemoHub] Loaded successfully!")
+    else
+        error("Syntax error in " .. scriptToLoad)
+    end
+end)
+
+if not success then
+    warn("[NemoHub] Loader failed:", err)
+end
